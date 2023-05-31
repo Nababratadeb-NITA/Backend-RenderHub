@@ -1,6 +1,6 @@
 import Prompt from "../../../../models/prompt";
 import { connectToDB } from "../../../../utils/database";
-import { v2 as cloudinary } from 'cloudinary';
+import { cloudinary } from 'cloudinary';
 
 
 cloudinary.config({
