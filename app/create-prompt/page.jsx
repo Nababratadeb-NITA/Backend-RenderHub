@@ -9,7 +9,6 @@ import Form from "@components/Form";
 const CreatePrompt = () => {
   const router = useRouter();
   const { data: session } = useSession();
-
   const [submitting, setIsSubmitting] = useState(false);
   const [post, setPost] = useState({
     prompt: "",
@@ -28,10 +27,10 @@ const CreatePrompt = () => {
           prompt: post.prompt,
           userId: session?.user.id,
           tag: post.tag,
-          image: post.image
+          image: post.image,
         }),
       });
-
+      setIsSubmitting(false);
       if (response.ok) {
         router.push("/");
       }
