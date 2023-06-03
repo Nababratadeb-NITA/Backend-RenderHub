@@ -1,29 +1,23 @@
 import Link from "next/link";
 
-const Form = ({ type, post, setPost, submitting, setIsSubmitting, handleSubmit }) => {
+const Form = ({
+  type,
+  post,
+  setPost,
+  submitting,
+  handleSubmit,
+}) => {
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
-
-    setIsSubmitting(true);
-    
-    try {
-      const response = await fetch("/api/prompt/new", {
-        method: "POST",
-        body: JSON.stringify({
-          prompt: post.prompt,
-          userId: session?.user.id,
-          tag: post.tag,
-          image: post.image
-        }),
-      });
-    } catch (error) {
-      console.log(error)
-    }finally {
-      setIsSubmitting(false)
-    }
-    
+    // convert image to base64
+    const value = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+    setPost({ ...post, image: value });
   };
-  
 
   return (
     <section className="w-full max-w-full flex-start flex-col">
@@ -31,7 +25,8 @@ const Form = ({ type, post, setPost, submitting, setIsSubmitting, handleSubmit }
         <span className="blue_gradient">{type} Post</span>
       </h1>
       <p className="desc text-left max-w-md">
-        {type} and share amazing prompts with the world, and let your imagination run wild with any AI-powered platform
+        {type} and share amazing prompts with the world, and let your
+        imagination run wild with any AI-powered platform
       </p>
 
       <form
@@ -77,6 +72,7 @@ const Form = ({ type, post, setPost, submitting, setIsSubmitting, handleSubmit }
             accept="image/*"
             onChange={handleImageUpload}
             className="form_input"
+            id="prompt-image"
           />
         </label>
 
