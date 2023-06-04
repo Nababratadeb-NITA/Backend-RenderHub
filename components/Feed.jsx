@@ -1,16 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import PromptCard from "./PromptCard";
 
+const LoadingComponent = () => {
+  return <div>Loading...</div>;
+};
+
 const PromptCardList = ({ data, handleTagClick }) => {
-  console.log(data);
   return (
-    <div className='mt-16 prompt_layout'>
-      {data.map((post) =>
-       (
-        
+    <div className="mt-16 prompt_layout">
+      {data.map((post) => (
         <PromptCard
           key={post._id}
           post={post}
@@ -23,6 +24,7 @@ const PromptCardList = ({ data, handleTagClick }) => {
 
 const Feed = () => {
   const [allPosts, setAllPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // Search states
   const [searchText, setSearchText] = useState("");
@@ -30,10 +32,16 @@ const Feed = () => {
   const [searchedResults, setSearchedResults] = useState([]);
 
   const fetchPosts = async () => {
-    const response = await fetch("/api/prompt");
-    const data = await response.json();
+    try {
+      const response = await fetch("/api/prompt");
+      const data = await response.json();
 
-    setAllPosts(data);
+      setAllPosts(data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Failed to fetch posts:", error);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -70,16 +78,20 @@ const Feed = () => {
     setSearchedResults(searchResult);
   };
 
+  if (loading) {
+    return <LoadingComponent />;
+  }
+
   return (
-    <section className='feed'>
-      <form className='relative w-full flex-center'>
+    <section className="feed">
+      <form className="relative w-full flex-center">
         <input
-          type='text'
-          placeholder='Search for a tag or a username'
+          type="text"
+          placeholder="Search for a tag or a username"
           value={searchText}
           onChange={handleSearchChange}
           required
-          className='search_input peer'
+          className="search_input peer"
         />
       </form>
 

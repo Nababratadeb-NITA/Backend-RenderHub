@@ -16,6 +16,10 @@ const PromptSchema = new Schema({
   image: {
     type: String, // Assuming you store the image URL as a string
   },
+  likes: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const Prompt = models.Prompt || model('Prompt', PromptSchema);
