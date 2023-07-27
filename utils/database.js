@@ -11,10 +11,8 @@ export const connectToDB = async () => {
   }
 
   try {
-    await mongoose.connect("mongodb+srv://nababratadeb5:nababrata@cluster.xcsuxjl.mongodb.net/?retryWrites=true&w=majority", {
+    await mongoose.connect("mongodb+srv://nababratadeb5:nababrata123@cluster.xcsuxjl.mongodb.net/?retryWrites=true&w=majority", {
       dbName: "share_prompt",
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
     })
 
     isConnected = true;
