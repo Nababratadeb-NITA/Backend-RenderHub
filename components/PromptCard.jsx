@@ -2,7 +2,6 @@ import { useState } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
-import { AiOutlineHeart } from "react-icons/ai";
 
 const PromptCard = ({ post, handleEdit, handleDelete, handleTagClick }) => {
   const { data: session } = useSession();
@@ -48,7 +47,7 @@ const PromptCard = ({ post, handleEdit, handleDelete, handleTagClick }) => {
   };
 
   return (
-    <div onClick={handlePostCheck} className="prompt_card">
+    <div className="prompt_card">
       <div className="flex justify-between items-start gap-5">
         <div
           className="flex-1 flex justify-start items-center gap-3 cursor-pointer"
@@ -88,7 +87,7 @@ const PromptCard = ({ post, handleEdit, handleDelete, handleTagClick }) => {
 
       <p className="my-4 font-satoshi text-sm text-gray-700">{post.prompt}</p>
       {post.image && (
-        <Image src={post.image} alt="prompt_image" width={500} height={300} />
+        <Image className="cursor-pointer" src={post.image} alt="prompt_image" width={500} height={300} />
       )}
       <p
         className="font-inter text-sm blue_gradient cursor-pointer"
@@ -96,16 +95,6 @@ const PromptCard = ({ post, handleEdit, handleDelete, handleTagClick }) => {
       >
         {post.tag}
       </p>
-
-      <div className="flex items-center mt-2">
-        <button
-          className="flex items-center text-gray-500 focus:outline-none"
-          onClick={handleLike}
-        >
-          <AiOutlineHeart />
-          {likesCount}
-        </button>
-      </div>
 
       {session?.user.id === post.creator._id && pathName === "/profile" && (
         <div className="mt-5 flex-center gap-4 border-t border-gray-100 pt-3">

@@ -10,7 +10,6 @@ export const POST = async (request) => {
       prompt,
       tag,
       image,
-      likes
     });
 
     await newPrompt.save();

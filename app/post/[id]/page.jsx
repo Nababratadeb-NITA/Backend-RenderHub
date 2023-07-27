@@ -1,12 +1,14 @@
 "use client";
 
 import CommentFeild from "@components/CommentFeild";
+import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const Post = ({ params }) => {
 
   const [userPost, setUserPost] = useState();
-  const [comment, setComment] = useState();
+  // const [comment, setComment] = useState();
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -19,30 +21,76 @@ const Post = ({ params }) => {
     if (params?.id) fetchPosts();
   }, [params.id]);
 
+  const renderLink = () => `/profile/${post.creator._id}?name=${post.creator.username}`
+
   return (
-    <div className="post-details">
-      {userPost ? (
-        <div className="post-card bg-white  rounded shadow-md p-4">
-          <h2 className="text-xl font-semibold mb-2">{userPost.prompt}</h2>
-          <p className="text-gray-500 mb-2">{userPost.tag}</p>
-          {userPost.image && (
-            <img src={userPost.image} alt="Post Image" className="w-full mb-4 rounded-lg" />
-          )}
-          <p className="text-gray-700">
-            Creator: {userPost.creator.username} ({userPost.creator.email})
+        <><section className="flexBetween gap-y-8 max-w-4xl max-xs:flex-col w-full">
+      <div className="flex-1 flex items-start gap-5 w-full max-xs:flex-col">
+        <Link href={renderLink()}>
+          <Image
+            src={projectDetails?.createdBy?.avatarUrl}
+            width={50}
+            height={50}
+            alt="profile"
+            className="rounded-full" />
+        </Link>
+
+        <div className="flex-1 flexStart flex-col gap-1">
+          <p className="self-start text-lg font-semibold">
+            {projectDetails?.title}
           </p>
-          <p className="text-gray-700">Likes: {userPost.likes}</p>
-          <p className="text-gray-700">Comments: {userPost.comments}</p>
-
-          <CommentFeild comment={comment} setComment={setComment}  />
-
+          <div className="user-info">
+            <Link href={renderLink()}>
+              {projectDetails?.createdBy?.name}
+            </Link>
+            <Image src="/dot.svg" width={4} height={4} alt="dot" />
+            <Link href={`/?category=${projectDetails.category}`} className="text-primary-purple font-semibold">
+              {projectDetails?.category}
+            </Link>
           </div>
-      ) : (
-        <p>Loading...</p>
+        </div>
+      </div>
+
+      {session?.user?.email === projectDetails?.createdBy?.email && (
+        <div className="flex justify-end items-center gap-2">
+          <ProjectActions projectId={projectDetails?.id} />
+        </div>
       )}
-    </div>
-  );
-  
-};
+    </section><section className="mt-14">
+        <Image
+          src={`${projectDetails?.image}`}
+          className="object-cover rounded-2xl"
+          width={1064}
+          height={798}
+          alt="poster" />
+      </section><section className="flexCenter flex-col mt-20">
+        <p className="max-w-5xl text-xl font-normal">
+          {projectDetails?.description}
+        </p>
+
+        <div className="flex flex-wrap mt-5 gap-5">
+          <Link href={projectDetails?.githubUrl} target="_blank" rel="noreferrer" className="flexCenter gap-2 tex-sm font-medium text-primary-purple">
+            🖥 <span className="underline">Github</span>
+          </Link>
+          <Image src="/dot.svg" width={4} height={4} alt="dot" />
+          <Link href={projectDetails?.liveSiteUrl} target="_blank" rel="noreferrer" className="flexCenter gap-2 tex-sm font-medium text-primary-purple">
+            🚀 <span className="underline">Live Site</span>
+          </Link>
+        </div>
+      </section><section className="flexCenter w-full gap-8 mt-28">
+        <span className="w-full h-0.5 bg-light-white-200" />
+        <Link href={renderLink()} className="min-w-[82px] h-[82px]">
+          <Image
+            src={projectDetails?.createdBy?.avatarUrl}
+            className="rounded-full"
+            width={82}
+            height={82}
+            alt="profile image" />
+        </Link>
+        <span className="w-full h-0.5 bg-light-white-200" />
+      </section><RelatedProjects userId={projectDetails?.createdBy?.id} projectId={projectDetails?.id} /></>
+    
+)
+}
 
 export default Post;
